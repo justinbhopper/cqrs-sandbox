@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using Sandbox.Domain.Models;
 
 namespace Sandbox.Domain
 {

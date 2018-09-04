@@ -1,6 +1,3 @@
-using System;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +22,7 @@ namespace Sandbox.Domain
 
 		public async Task CommitAsync(CancellationToken cancellationToken = default(CancellationToken))
 		{
-			await _dbContext.SaveChangesAsync();
+			await _dbContext.SaveChangesAsync(cancellationToken);
 		}
 	}
 }

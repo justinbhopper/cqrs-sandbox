@@ -22,19 +22,19 @@ namespace Sandbox.Domain
 
 		public async Task<IList<Film>> HandleAsync(GetAllFilmsQuery query, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			return await OrderBy(_repository.AsQueryable(), query.SortBy).ToListAsync();
+			return await OrderBy(_repository.AsQueryable(), query.SortBy).ToListAsync(cancellationToken);
 		}
 
 		public async Task<Film> HandleAsync(GetFilmQuery query, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			return await _repository.GetAsync(query.Id);
+			return await _repository.GetAsync(query.Id, cancellationToken);
 		}
 
 		public async Task<IList<Film>> HandleAsync(SearchFilmsByTitleQuery query, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return await _repository.AsQueryable()
 				.Where(f => StringComparer.Compare(f.Title, query.Title, query.TitleComparison))
-				.ToListAsync();
+				.ToListAsync(cancellationToken);
 		}
 
 		private IQueryable<Film> OrderBy(IQueryable<Film> query, GetAllFilmsSortField sortBy)

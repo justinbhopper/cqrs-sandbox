@@ -17,7 +17,7 @@ namespace Sandbox.Domain
 		public Task<TResult> HandleAsync(TQuery query, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			var validationContext = new ValidationContext(query, null, null);
-			Validator.ValidateObject(query, validationContext, validateAllProperties: true);
+			Validator.ValidateObject(query, validationContext, true);
 
 			return _queryHandler.HandleAsync(query, cancellationToken);
 		}
