@@ -9,9 +9,9 @@ using Sandbox.Domain.Models;
 namespace Sandbox.Domain
 {
 	public class FilmQueryHandler : 
-		IQueryHandler<FilmQueries.GetAll, IList<Film>>,
-		IQueryHandler<FilmQueries.GetById, Film>,
-		IQueryHandler<FilmQueries.SearchByTitle, IList<Film>> 
+		IQueryHandler<GetAllFilmsQuery, IList<Film>>,
+		IQueryHandler<GetFilmQuery, Film>,
+		IQueryHandler<SearchFilmsByTitleQuery, IList<Film>> 
 	{
 		private readonly IRepository<Film> _repository;
 
@@ -20,30 +20,30 @@ namespace Sandbox.Domain
 			_repository = repository;
 		}
 
-		public async Task<IList<Film>> HandleAsync(FilmQueries.GetAll query, CancellationToken cancellationToken = default(CancellationToken))
+		public async Task<IList<Film>> HandleAsync(GetAllFilmsQuery query, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return await OrderBy(_repository.AsQueryable(), query.SortBy).ToListAsync();
 		}
 
-		public async Task<Film> HandleAsync(FilmQueries.GetById query, CancellationToken cancellationToken = default(CancellationToken))
+		public async Task<Film> HandleAsync(GetFilmQuery query, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return await _repository.GetAsync(query.Id);
 		}
 
-		public async Task<IList<Film>> HandleAsync(FilmQueries.SearchByTitle query, CancellationToken cancellationToken = default(CancellationToken))
+		public async Task<IList<Film>> HandleAsync(SearchFilmsByTitleQuery query, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			return await _repository.AsQueryable()
 				.Where(f => StringComparer.Compare(f.Title, query.Title, query.TitleComparison))
 				.ToListAsync();
 		}
 
-		private IQueryable<Film> OrderBy(IQueryable<Film> query, FilmQueries.GetAllSortField sortBy)
+		private IQueryable<Film> OrderBy(IQueryable<Film> query, GetAllFilmsSortField sortBy)
 		{
 			switch (sortBy)
 			{
-				case FilmQueries.GetAllSortField.Rank:
+				case GetAllFilmsSortField.Rank:
 					return query.OrderBy(f => f.Rank);
-				case FilmQueries.GetAllSortField.Title:
+				case GetAllFilmsSortField.Title:
 					return query.OrderBy(f => f.Title);
 				default:
 					throw new ArgumentOutOfRangeException(nameof(sortBy));

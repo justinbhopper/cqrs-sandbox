@@ -6,9 +6,9 @@ using Sandbox.Domain.Models;
 namespace Sandbox.Domain
 {
 	public class FilmCommandHandler : 
-		ICommandHandler<FilmCommands.Create>,
-		ICommandHandler<FilmCommands.Update>,
-		ICommandHandler<FilmCommands.Delete> 
+		ICommandHandler<CreateFilmCommand>,
+		ICommandHandler<UpdateFilmCommand>,
+		ICommandHandler<DeleteFilmCommand> 
 	{
 		private readonly IRepository<Film> _repository;
 		private readonly IUnitOfWork _uow;
@@ -19,7 +19,7 @@ namespace Sandbox.Domain
 			_repository = uow.GetRepository<Film>();
 		}
 
-		public async Task HandleAsync(FilmCommands.Create command, CancellationToken cancellationToken = default(CancellationToken))
+		public async Task HandleAsync(CreateFilmCommand command, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			var film = new Film
 			{
@@ -32,7 +32,7 @@ namespace Sandbox.Domain
 			await _uow.CommitAsync(cancellationToken);
 		}
 
-		public async Task HandleAsync(FilmCommands.Update command, CancellationToken cancellationToken = default(CancellationToken))
+		public async Task HandleAsync(UpdateFilmCommand command, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			var film = new Film
 			{
@@ -46,7 +46,7 @@ namespace Sandbox.Domain
 			await _uow.CommitAsync(cancellationToken);
 		}
 
-		public async Task HandleAsync(FilmCommands.Delete command, CancellationToken cancellationToken = default(CancellationToken))
+		public async Task HandleAsync(DeleteFilmCommand command, CancellationToken cancellationToken = default(CancellationToken))
 		{
 			await _repository.RemoveAsync(command.FilmId, cancellationToken);
 			await _uow.CommitAsync(cancellationToken);

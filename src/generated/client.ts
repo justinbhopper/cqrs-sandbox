@@ -97,7 +97,7 @@ export class FilmsClient {
         return Promise.resolve<Film>(<any>null);
     }
 
-    insert(command: Create): Promise<void> {
+    create(command: CreateFilmCommand): Promise<void> {
         let url_ = this.baseUrl + "/api/v1/films/create";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -112,11 +112,11 @@ export class FilmsClient {
         };
 
         return this.http.fetch(url_, options_).then((_response: Response) => {
-            return this.processInsert(_response);
+            return this.processCreate(_response);
         });
     }
 
-    protected processInsert(response: Response): Promise<void> {
+    protected processCreate(response: Response): Promise<void> {
         const status = response.status;
         let _headers: any = {}; if (response.headers && response.headers.forEach) { response.headers.forEach((v: any, k: any) => _headers[k] = v); };
         if (status === 204) {
@@ -131,7 +131,7 @@ export class FilmsClient {
         return Promise.resolve<void>(<any>null);
     }
 
-    update(command: Update): Promise<void> {
+    update(command: UpdateFilmCommand): Promise<void> {
         let url_ = this.baseUrl + "/api/v1/films/update";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -165,7 +165,7 @@ export class FilmsClient {
         return Promise.resolve<void>(<any>null);
     }
 
-    delete(command: Delete): Promise<void> {
+    delete(command: DeleteFilmCommand): Promise<void> {
         let url_ = this.baseUrl + "/api/v1/films/delete";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -248,12 +248,12 @@ export interface IFilm {
     rank: number;
 }
 
-export class Create implements ICreate {
+export class CreateFilmCommand implements ICreateFilmCommand {
     title!: string;
     year!: number;
     rank!: number;
 
-    constructor(data?: ICreate) {
+    constructor(data?: ICreateFilmCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -270,9 +270,9 @@ export class Create implements ICreate {
         }
     }
 
-    static fromJS(data: any): Create {
+    static fromJS(data: any): CreateFilmCommand {
         data = typeof data === 'object' ? data : {};
-        let result = new Create();
+        let result = new CreateFilmCommand();
         result.init(data);
         return result;
     }
@@ -286,16 +286,16 @@ export class Create implements ICreate {
     }
 }
 
-export interface ICreate {
+export interface ICreateFilmCommand {
     title: string;
     year: number;
     rank: number;
 }
 
-export class Update extends Create implements IUpdate {
+export class UpdateFilmCommand extends CreateFilmCommand implements IUpdateFilmCommand {
     id!: string;
 
-    constructor(data?: IUpdate) {
+    constructor(data?: IUpdateFilmCommand) {
         super(data);
     }
 
@@ -306,9 +306,9 @@ export class Update extends Create implements IUpdate {
         }
     }
 
-    static fromJS(data: any): Update {
+    static fromJS(data: any): UpdateFilmCommand {
         data = typeof data === 'object' ? data : {};
-        let result = new Update();
+        let result = new UpdateFilmCommand();
         result.init(data);
         return result;
     }
@@ -321,14 +321,14 @@ export class Update extends Create implements IUpdate {
     }
 }
 
-export interface IUpdate extends ICreate {
+export interface IUpdateFilmCommand extends ICreateFilmCommand {
     id: string;
 }
 
-export class Delete implements IDelete {
+export class DeleteFilmCommand implements IDeleteFilmCommand {
     filmId!: string;
 
-    constructor(data?: IDelete) {
+    constructor(data?: IDeleteFilmCommand) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -343,9 +343,9 @@ export class Delete implements IDelete {
         }
     }
 
-    static fromJS(data: any): Delete {
+    static fromJS(data: any): DeleteFilmCommand {
         data = typeof data === 'object' ? data : {};
-        let result = new Delete();
+        let result = new DeleteFilmCommand();
         result.init(data);
         return result;
     }
@@ -357,7 +357,7 @@ export class Delete implements IDelete {
     }
 }
 
-export interface IDelete {
+export interface IDeleteFilmCommand {
     filmId: string;
 }
 
