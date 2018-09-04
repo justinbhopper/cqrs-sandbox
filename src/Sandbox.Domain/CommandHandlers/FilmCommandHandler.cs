@@ -9,13 +9,11 @@ namespace Sandbox.Domain
 		ICommandHandler<UpdateFilmCommand>,
 		ICommandHandler<DeleteFilmCommand> 
 	{
-		private readonly IRepository<Film> _repository;
-		private readonly IUnitOfWork _uow;
+		private readonly IRepository _repository;
 
-		public FilmCommandHandler(IUnitOfWork uow)
+		public FilmCommandHandler(IRepository repository)
 		{
-			_uow = uow;
-			_repository = uow.GetRepository<Film>();
+			_repository = repository;
 		}
 
 		public async Task HandleAsync(CreateFilmCommand command, CancellationToken cancellationToken = default(CancellationToken))
@@ -28,27 +26,32 @@ namespace Sandbox.Domain
 			};
 
 			_repository.Add(film);
-			await _uow.CommitAsync(cancellationToken);
+
+			await _repository.SaveChangesAsync(cancellationToken);
 		}
 
 		public async Task HandleAsync(UpdateFilmCommand command, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			var film = new Film
-			{
-				Id = command.Id,
-				Title = command.Title,
-				Year = command.Year,
-				Rank = command.Rank
-			};
+			var film = await _repository.GetAsync<Film>(command.Id, cancellationToken)
+				?? throw new ResourceNotFoundException(command.Id, nameof(Film));
+
+			film.Title = command.Title;
+			film.Year = command.Year;
+			film.Rank = command.Rank;
 
 			_repository.Update(film);
-			await _uow.CommitAsync(cancellationToken);
+
+			await _repository.SaveChangesAsync(cancellationToken);
 		}
 
 		public async Task HandleAsync(DeleteFilmCommand command, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			await _repository.RemoveAsync(command.FilmId, cancellationToken);
-			await _uow.CommitAsync(cancellationToken);
+			var film = await _repository.GetAsync<Film>(command.FilmId, cancellationToken)
+				?? throw new ResourceNotFoundException(command.FilmId, nameof(Film));
+
+			_repository.Remove(film);
+
+			await _repository.SaveChangesAsync(cancellationToken);
 		}
 	}
 }

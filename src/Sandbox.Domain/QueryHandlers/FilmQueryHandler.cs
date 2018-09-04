@@ -13,26 +13,26 @@ namespace Sandbox.Domain
 		IQueryHandler<GetFilmQuery, Film>,
 		IQueryHandler<SearchFilmsByTitleQuery, IList<Film>> 
 	{
-		private readonly IRepository<Film> _repository;
+		private readonly IQueryEntities _query;
 
-		public FilmQueryHandler(IRepository<Film> repository)
+		public FilmQueryHandler(IQueryEntities query)
 		{
-			_repository = repository;
+			_query = query;
 		}
 
 		public async Task<IList<Film>> HandleAsync(GetAllFilmsQuery query, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			return await OrderBy(_repository.AsQueryable(), query.SortBy).ToListAsync(cancellationToken);
+			return await OrderBy(_query.Query<Film>(), query.SortBy).ToListAsync(cancellationToken);
 		}
 
 		public async Task<Film> HandleAsync(GetFilmQuery query, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			return await _repository.GetAsync(query.Id, cancellationToken);
+			return await _query.Query<Film>().SingleOrDefaultAsync(f => f.Id == query.Id, cancellationToken);
 		}
 
 		public async Task<IList<Film>> HandleAsync(SearchFilmsByTitleQuery query, CancellationToken cancellationToken = default(CancellationToken))
 		{
-			return await _repository.AsQueryable()
+			return await _query.Query<Film>()
 				.Where(f => StringComparer.Compare(f.Title, query.Title, query.TitleComparison))
 				.ToListAsync(cancellationToken);
 		}

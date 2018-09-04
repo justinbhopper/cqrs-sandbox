@@ -8,7 +8,7 @@ using Sandbox.Domain.Models;
 namespace Sandbox.Controllers
 {
 	[ApiController]
-	[Route("api/v1/films")]
+	[Route("api/v1/[controller]")]
 	public class FilmsController : ControllerBase
 	{
 		private readonly IQueryHandler<GetAllFilmsQuery, IList<Film>> _getAllFilms;

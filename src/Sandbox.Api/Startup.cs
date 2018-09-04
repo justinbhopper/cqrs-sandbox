@@ -20,15 +20,14 @@ namespace Sandbox.Api
 		}
 
 		public IConfiguration Configuration { get; }
-
-		// This method gets called by the runtime. Use this method to add services to the container.
+		
 		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
 			services.AddDbContext<SandboxDbContext>(opt => 
 				opt.UseInMemoryDatabase("Sandbox"));
 			
 			services.AddMvc()
-				.AddControllersAsServices()
+				.AddControllersAsServices() // Allows Autofac to manage DI for controllers
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 			
 			services.AddSwaggerGen(c =>
@@ -40,12 +39,17 @@ namespace Sandbox.Api
 			
 			builder.Populate(services);
 
-			var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+			builder.RegisterType<SandboxDbContext>()
+				.As<DbContext>()
+				.AsSelf()
+				.InstancePerLifetimeScope();
 
-			builder.RegisterType<SandboxDbContext>().As<DbContext>().InstancePerLifetimeScope();
-			builder.RegisterType(typeof(EntityFrameworkUnitOfWork)).As(typeof(IUnitOfWork));
-			builder.RegisterType(typeof(EntityFrameworkRepositoryFactory)).As(typeof(IRepositoryFactory));
-			builder.RegisterGeneric(typeof(EntityFrameworkRepository<>)).As(typeof(IRepository<>));
+			builder.RegisterType<EntityFrameworkRepository>()
+				.As<IUnitOfWork>()
+				.As<IQueryEntities>()
+				.As<IRepository>();
+
+			var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
 			builder.RegisterAssemblyTypes(assemblies)
 				.AsClosedTypesOf(typeof(IQueryHandler<,>))
@@ -60,8 +64,7 @@ namespace Sandbox.Api
 			
 			return new AutofacServiceProvider(builder.Build());
 		}
-
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{
 			if (env.IsDevelopment())
@@ -70,6 +73,7 @@ namespace Sandbox.Api
 			}
 			else
 			{
+				app.UseHttpsRedirection();
 				app.UseHsts();
 			}
 
@@ -81,7 +85,6 @@ namespace Sandbox.Api
 				c.RoutePrefix = string.Empty; // Serve swagger at root of website
 			});
 
-			app.UseHttpsRedirection();
 			app.UseMvc();
 		}
 	}

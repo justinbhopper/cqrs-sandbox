@@ -17,7 +17,7 @@ export class FilmsClient {
     }
 
     getAll(): Promise<Film[]> {
-        let url_ = this.baseUrl + "/api/v1/films";
+        let url_ = this.baseUrl + "/api/v1/Films";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <RequestInit>{
@@ -56,7 +56,7 @@ export class FilmsClient {
     }
 
     getById(id: string): Promise<Film> {
-        let url_ = this.baseUrl + "/api/v1/films/{id}";
+        let url_ = this.baseUrl + "/api/v1/Films/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
         url_ = url_.replace("{Id}", encodeURIComponent("" + id)); 
@@ -98,7 +98,7 @@ export class FilmsClient {
     }
 
     create(command: CreateFilmCommand): Promise<void> {
-        let url_ = this.baseUrl + "/api/v1/films/create";
+        let url_ = this.baseUrl + "/api/v1/Films/create";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(command);
@@ -132,7 +132,7 @@ export class FilmsClient {
     }
 
     update(command: UpdateFilmCommand): Promise<void> {
-        let url_ = this.baseUrl + "/api/v1/films/update";
+        let url_ = this.baseUrl + "/api/v1/Films/update";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(command);
@@ -166,7 +166,7 @@ export class FilmsClient {
     }
 
     delete(command: DeleteFilmCommand): Promise<void> {
-        let url_ = this.baseUrl + "/api/v1/films/delete";
+        let url_ = this.baseUrl + "/api/v1/Films/delete";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(command);
