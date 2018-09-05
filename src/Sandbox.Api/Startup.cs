@@ -58,7 +58,7 @@ namespace Sandbox.Api
 			builder.RegisterAssemblyTypes(assemblies)
 				.AsClosedTypesOf(typeof(ICommandHandler<>))
 				.AsImplementedInterfaces();
-
+			
 			// Register validator decorator for all query handlers
 			builder.RegisterGenericDecorator(typeof(ValidationQueryHandlerDecorator<,>), typeof(IQueryHandler<,>), "validatorQueryHandler");
 			
