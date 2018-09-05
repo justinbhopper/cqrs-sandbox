@@ -1,6 +1,6 @@
 {
-	"name": "@tehsolace/core-sandbox",
-	"version": "0.2.0",
+	"name": "@justinbhopper/cqrs-sandbox",
+	"version": "0.1.0",
 	"private": false,
 	"dependencies": {},
 	"scripts": {},
@@ -10,13 +10,13 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/tehsolace/core-sandbox.git"
+		"url": "git+https://github.com/justinbhopper/cqrs-sandbox.git"
 	},
 	"author": "Justin Hopper",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/tehsolace/core-sandbox/issues"
+		"url": "https://github.com/justinbhopper/cqrs-sandbox/issues"
 	},
-	"homepage": "https://github.com/tehsolace/core-sandbox#readme",
-	"description": ".Net core sandbox"
+	"homepage": "https://github.com/justinbhopper/cqrs-sandbox#readme",
+	"description": "CQRS sandbox"
 }
