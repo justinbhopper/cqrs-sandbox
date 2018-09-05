@@ -7,11 +7,11 @@ namespace Sandbox.Domain
 	public class ValidationQueryHandlerDecorator<TQuery, TResult> : IQueryHandler<TQuery, TResult>
 		where TQuery : IQuery<TResult>
 	{
-		private readonly IQueryHandler<TQuery, TResult> _queryHandler;
+		private readonly IQueryHandler<TQuery, TResult> _inner;
 
-		public ValidationQueryHandlerDecorator(IQueryHandler<TQuery, TResult> queryHandler)
+		public ValidationQueryHandlerDecorator(IQueryHandler<TQuery, TResult> inner)
 		{
-			_queryHandler = queryHandler;
+			_inner = inner;
 		}
 
 		public Task<TResult> HandleAsync(TQuery query, CancellationToken cancellationToken = default(CancellationToken))
@@ -19,7 +19,7 @@ namespace Sandbox.Domain
 			var validationContext = new ValidationContext(query, null, null);
 			Validator.ValidateObject(query, validationContext, true);
 
-			return _queryHandler.HandleAsync(query, cancellationToken);
+			return _inner.HandleAsync(query, cancellationToken);
 		}
 	}
 }

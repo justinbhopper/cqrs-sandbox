@@ -40,28 +40,24 @@ namespace Sandbox.Api
 			builder.Populate(services);
 
 			builder.RegisterType<SandboxDbContext>()
-				.As<DbContext>()
+				.As<IUnitOfWork>()
+				.As<IQueryEntities>()
+				.As<IDbContext>()
+				.AsImplementedInterfaces()
 				.AsSelf()
 				.InstancePerLifetimeScope();
 
-			builder.RegisterType<EntityFrameworkRepository>()
-				.As<IUnitOfWork>()
-				.As<IQueryEntities>()
-				.As<IRepository>();
-
 			var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
-			builder.RegisterAssemblyTypes(assemblies)
-				.AsClosedTypesOf(typeof(IQueryHandler<,>))
-				.AsImplementedInterfaces();
-
-			builder.RegisterAssemblyTypes(assemblies)
-				.AsClosedTypesOf(typeof(ICommandHandler<>))
-				.AsImplementedInterfaces();
 			
-			// Register validator decorator for all query handlers
-			builder.RegisterGenericDecorator(typeof(ValidationQueryHandlerDecorator<,>), typeof(IQueryHandler<,>), "validatorQueryHandler");
-			
+			// Register IQueryHandlers and decorate them
+			builder.RegisterAssemblyTypes(assemblies).AsClosedTypesOf(typeof(IQueryHandler<,>), "queryHandler").InstancePerLifetimeScope();
+			builder.RegisterGenericDecorator(typeof(ValidationQueryHandlerDecorator<,>), typeof(IQueryHandler<,>), "queryHandler");
+
+			// Register ICommandHandlers and decorate them
+			builder.RegisterAssemblyTypes(assemblies).AsClosedTypesOf(typeof(ICommandHandler<>), "commandHandler").InstancePerLifetimeScope();
+			builder.RegisterGenericDecorator(typeof(ValidationCommandHandlerDecorator<>), typeof(ICommandHandler<>), "commandHandler", "validatorCommandHandler");
+			builder.RegisterGenericDecorator(typeof(DeadlockRetryCommandHandlerDecorator<>), typeof(ICommandHandler<>), "validatorCommandHandler");
+
 			return new AutofacServiceProvider(builder.Build());
 		}
 		

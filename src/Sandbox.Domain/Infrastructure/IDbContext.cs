@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Sandbox.Domain
 {
-	public interface IRepository : IQueryEntities, IUnitOfWork
+	public interface IDbContext : IQueryEntities, IUnitOfWork
 	{
 		Task<TEntity> GetAsync<TEntity>(Guid id, CancellationToken cancellationToken = default(CancellationToken)) where TEntity : class;
 		IQueryable<TEntity> FindMany<TEntity>() where TEntity : class;
