@@ -43,8 +43,6 @@ namespace Sandbox.Api
 				.As<IUnitOfWork>()
 				.As<IQueryEntities>()
 				.As<IDbContext>()
-				.AsImplementedInterfaces()
-				.AsSelf()
 				.InstancePerLifetimeScope();
 
 			var assemblies = AppDomain.CurrentDomain.GetAssemblies();
