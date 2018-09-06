@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sandbox.Api", "src\Sandbox.Api\Sandbox.Api.csproj", "{DB9119D4-2B02-4423-B184-C1A04B30D737}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sandbox.Api", "Sandbox.Api\Sandbox.Api.csproj", "{DB9119D4-2B02-4423-B184-C1A04B30D737}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sandbox.Domain", "src\Sandbox.Domain\Sandbox.Domain.csproj", "{02FCD2F1-07C4-4446-B915-C7AC0330A7EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sandbox.Domain", "Sandbox.Domain\Sandbox.Domain.csproj", "{02FCD2F1-07C4-4446-B915-C7AC0330A7EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -87,7 +87,7 @@
 			"enumNameGeneratorType": null,
 			"serviceHost": null,
 			"serviceSchemes": null,
-			"output": "../generated/client.ts"
+			"output": "../generated/index.ts"
 		}
 	}
 }

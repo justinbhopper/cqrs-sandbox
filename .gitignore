@@ -49,3 +49,4 @@ _ReSharper*/
 
 # ignore npm
 /node_modules
+/dist

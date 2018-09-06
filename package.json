@@ -1,10 +1,12 @@
 {
 	"name": "@justinbhopper/cqrs-sandbox",
-	"version": "0.1.1",
+	"version": "0.2.0",
 	"private": false,
 	"dependencies": {},
-	"scripts": {},
-	"main": "src/generated/client.ts",
+	"scripts": {
+		"install": "tsc"
+	},
+	"main": "dist/index.js",
 	"devDependencies": {
 		"typescript": "^2.9.2"
 	},
