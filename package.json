@@ -1,10 +1,10 @@
 {
 	"name": "@justinbhopper/cqrs-sandbox",
-	"version": "0.2.3",
+	"version": "0.2.4",
 	"private": false,
 	"dependencies": {},
 	"scripts": {
-		"build": "tsc",
+		"build": "tsc -p tsconfig.json",
 		"prepublish": "npm run build"
 	},
 	"main": "dist/index.js",
